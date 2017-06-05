@@ -19,7 +19,7 @@ func WriteDelimitedTo(w io.Writer, data []byte) error {
 	copy(concat, buf[:n])
 	copy(concat[n:], data)
 
-	_, err = w.Write(concat)
+	_, err := w.Write(concat)
 	return err
 }
 
@@ -34,9 +34,9 @@ func ReadDelimitedFrom(r Reader) ([]byte, error) {
 	dlen, err := binary.ReadUvarint(r)
 	if err != nil {
 		if err == io.EOF || err == io.ErrUnexpectedEOF {
-			return err
+			return nil, err
 		}
-		return fmt.Errorf("unable to read length: %v", err)
+		return nil, fmt.Errorf("unable to read length: %v", err)
 	}
 	buf := make([]byte, dlen)
 	_, err = io.ReadFull(r, buf)
